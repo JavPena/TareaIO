@@ -13,7 +13,7 @@ public class MCDPRandomSolution {
     private int N;
 
     // Solution individuo
-    private int[][] superA;
+    private int[] superA;
 
     // Constructor
     public MCDPRandomSolution(int f_weight[][], int[] f_size, int N) {
@@ -26,24 +26,15 @@ public class MCDPRandomSolution {
     
     public void createRandomSolution() {
         // create random permutation of X e machine_cell
-        this.superA = new int[N][N];
+        this.superA = new int[N];
         int[] vector= new int[N];
         
         for(int i=0;i<N;i++){
-            for(int j=0;j<N;j++){
-                superA[i][j]=0;
-            }
+            superA[i]=i+1;
+            
         }
         
-        for(int i=0;i<N;i++){
-            vector[i]=i;
-        }
-        
-        shuffleArray(vector);
-        
-        for(int i=0;i<N;i++){
-            superA[i][vector[i]]=1;
-        }
+        shuffleArray(superA);
         
         
     }
@@ -63,11 +54,11 @@ public class MCDPRandomSolution {
     }
 
     // Get and Set
-    public int[][] getMachine_cell() {
+    public int[] getMachine_cell() {
         return superA;
     }
 
-    public void setMachine_cell(int[][] machine_cell) {
+    public void setMachine_cell(int[] machine_cell) {
         this.superA = machine_cell;
     }
 

@@ -95,24 +95,15 @@ public class Metaheuristic {
         clasificacion();
 
         while (iteration < this.numberIteration) {
-            //System.out.println( " iteracion: "+iteration+"--------------------------------------------------------");    
+            
+            for ( int i = 0 ; i < poblation.size() ; i++ ){
+                poblation.get(i).calculateDifferences(poblation.get(0).getMachine_cell());
+            }
             
             
             
             for ( int i = 0 ; i < poblation.size() ; i++ ){
-                int [][] M;
-                if ( poblation.get(i).getChicken() == 1 ){
-                    M = movimientoGallo( poblation.get(i).getMachine_cell());
-                }
-                
-                else {
-                    if ( poblation.get(i).getChicken() == 2 ){
-                        M = movimientoGallina ( poblation.get(i).getMachine_cell(), i);
-                    }
-                    else{
-                        M = movimientoPollo(poblation.get(i).getMachine_cell(),i);
-                    }
-                }
+                int [] M = mutate(i);
                 
                 //se revisa que la nueva matriz cumpla con MCDP y se reemplaza con el riginal si el fitness es mejor
                 Individual Pk = new Individual(poblation.get(i).getMachine_cell(), poblation.get(i).getFitness());
@@ -123,13 +114,11 @@ public class Metaheuristic {
                     Pk.setFitness(boctorModel.calculateFitness());
                     Pk.setMachine_cell(boctorModel.getMachine());
                 }
-                else{
-                    Pk.setMachine_cell(poblation.get(i).getMachine_cell());
-                }
                 if(Pk.getFitness()<poblation.get(i).getFitness()){
                     poblation.get(i).setMachine_cell(Pk.getMachine_cell());
                     poblation.get(i).setFitness(Pk.getFitness());
                 }
+               
                 
                 
             }
@@ -158,6 +147,43 @@ public class Metaheuristic {
         //Plot.createPlots(this.modifyNumberPoblation, this.modifyNumberIteration, this.modifyConsultationFactor, resultsPath, fileName, this.seriesPoblationFitness, this.seriesIterationFitness, this.seriesConsultationFactorFitness, this.bestFitnessAuthor, this.numberIterationBestFitness, this.consultationFactorBestFitness, this.numberIterationAS);
     
     }
+    //</editor-fold>
+    
+    
+    public int[] mutate(int i){
+        int M[] = this.poblation.get(i).getMachine_cell();
+        Random random= new Random();
+        int A,B,aux;
+        if(this.poblation.get(i).getCantDifferences()!=0){
+            int[] differences= poblation.get(i).getDifferences();
+            do{
+                A=(int)(random.nextDouble()*(this.data.n));
+                if(A==8)A=7;
+            }while(differences[A]==0);
+            do{
+                B=(int)(random.nextDouble()*(this.data.n));
+                if(B==8)B=7;
+            }while(B==A || differences[B]==0);
+
+            aux=M[A];
+            M[A]=M[B];
+            M[B]=aux;
+        }else{
+            A=(int)(random.nextDouble()*(this.data.n));
+            if(A==8)A=7;
+            do{
+                B=(int)(random.nextDouble()*(this.data.n));
+                if(B==8)B=7;
+            }while(B==A);
+
+            aux=M[A];
+            M[A]=M[B];
+            M[B]=aux;
+        }
+        
+        return M;
+    }
+    
     
     private ArrayList<Individual> Gallos;
     private ArrayList<Individual> Pollitos;
@@ -229,7 +255,7 @@ public class Metaheuristic {
         
     }
     
-//</editor-fold>
+
     public void ordenaBacterias(){
         boolean orden = false;
         int i = 0;
@@ -334,17 +360,7 @@ public class Metaheuristic {
     return salida;
     }
     
-    public int [][] movimientoGallo (int [][] matriz ){
-        for (int i = 0; i < data.n; i++){
-            for (int j = 0; j < data.n; j++){
-                matriz[i][j] =discretiza(transforma( matriz[i][j] * bin((1+(int)Math.random()*2))));  
-            }
-        }
-        
-        
-        return matriz;
-        
-    }
+   
    
     int S1 (int posicion){
         
@@ -375,47 +391,9 @@ public class Metaheuristic {
             return 0;
         }
     }
-    //pasar valores del pollo y del gallo para realizar la operacion de la gallina
-    public int [][] movimientoGallina (int [][] matriz, int posicion){
-        int[][] Matriz = generaRandom();
-        int i, j, posRandom;
-        Random r = new Random();
-        
-        do{
-            posRandom = r.nextInt(posicion) + 1;
-        }while(poblation.get(posicion).getFitness() < poblation.get(posRandom).getFitness());
-        
-        for ( i = 0 ; i < data.n ; i++){
-            for ( j = 0; j < data.n ; j++) { 
-                Matriz[i][j] = discretiza(transforma (matriz[i][j]+ S1(posicion) + Math.random() 
-                        * ( poblation.get(0).getMachine_cell()[i][j] - matriz[i][j] )
-                        + S2( posicion , posRandom ) * Math.random()
-                        * ( poblation.get( posRandom ).getMachine_cell()[i][j] - matriz[i][j] )));
-            }
-        }
-        
-        
-       return Matriz; 
-        
-    }
     
-    public int [][] movimientoPollo (int [][] matriz , int posicion){
-        int i, j, posRandom;
-        int [][] Matriz = generaRandom();
-        Random r = new Random();
-        posRandom = r.nextInt(3);
-        
-        
-        for ( i = 0; i < data.n ; i++ ){
-            for ( j = 0; j < data.n ; j++ ){
-                Matriz [i][j] = discretiza(transforma(Matriz[i][j] + posRandom
-                                * ( poblation.get(posicion).getParentesco().getMachine_cell()[i][j] -
-                                    matriz[i][j])));
-            }
-        }
-        
-        return Matriz;
-    }
+    
+    
     
     
     public void limpiaParentesco(){
@@ -521,14 +499,6 @@ public class Metaheuristic {
             }    
     }
 
-    
-
-
-
-
-
-
-
 //<editor-fold defaultstate="collapsed" desc="generateInitialPoblation">
     private void generateInitialPoblation() {
         for (int i = 0; i < numberIndividual; i++) {
@@ -566,14 +536,6 @@ public class Metaheuristic {
         }
     }
 //</editor-fold>
-
-
-
-
-
-
-
-
 
     public void writeResults(String folderPath, long miliSeconds, String fileName, int numberPoblation, int numberField, float k1, float k2, float consultationFactor, int numberIterations) {
 

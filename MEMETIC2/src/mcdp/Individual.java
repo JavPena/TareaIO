@@ -8,7 +8,9 @@ import java.util.stream.IntStream;
 public class Individual {
 
     // Solution matrix
-    private int[][] superA;
+    private int[] superA;
+    private int[] differences;
+    private int cantDifferences;
 
     // Fitness solution
     private float fitness;
@@ -25,14 +27,12 @@ public class Individual {
     private List<Index> indexDifferencePartCell = new ArrayList<>();
 
     // Constructor
-    public Individual(int[][] machine_cell, float fitness) {
-        this.superA = new int[machine_cell.length][machine_cell[0].length];
+    public Individual(int[] machine_cell, float fitness) {
+        this.superA = new int[machine_cell.length];
 
         // Copy original values
         for (int i = 0; i < machine_cell.length; i++) {
-            for(int j = 0; j < machine_cell[0].length;j++){
-                this.superA[i][j]=machine_cell[i][j];
-            }
+            this.superA[i]=machine_cell[i];
         }
 
 
@@ -40,15 +40,15 @@ public class Individual {
         //Cuando se cree no tendrá parentesco.
         parentesco = null;
     }
+    
+    
 
-    public Individual(int[][] machine_cell) {
-        this.superA = new int[machine_cell.length][machine_cell[0].length];
+    public Individual(int[] machine_cell) {
+        this.superA = new int[machine_cell.length];
 
         // Copy original values
         for (int i = 0; i < machine_cell.length; i++) {
-            for(int j = 0; j < machine_cell[0].length;j++){
-                this.superA[i]=machine_cell[i];
-            }
+            this.superA[i]=machine_cell[i];
         }
 
         
@@ -60,19 +60,39 @@ public class Individual {
     }
 
     // Get and Set
-    public int[][] getMachine_cell() {
+    public int[] getMachine_cell() {
         return superA;
     }
 
-    public void setMachine_cell(int[][] machine_cell) {
-        this.superA = new int[machine_cell.length][machine_cell[0].length];
+    public void setMachine_cell(int[] machine_cell) {
+        this.superA = new int[machine_cell.length];
 
         // Copy original values
         for (int i = 0; i < machine_cell.length; i++) {
-            for(int j = 0; j < machine_cell[0].length;j++){
-                this.superA[i]=machine_cell[i];
+            this.superA[i]=machine_cell[i];
+        }
+    }
+    
+    public void calculateDifferences(int[] bestSolution){
+        this.differences= new int[bestSolution.length];
+        this.cantDifferences=0;
+        for(int i =0; i< bestSolution.length; i++){
+            if(this.superA[i]!= bestSolution[i]){
+                this.cantDifferences++;
+                this.differences[i]=1;
+            }
+            else{
+                this.differences[i]=0;
             }
         }
+    }
+    
+    public int getCantDifferences(){
+        return this.cantDifferences;
+    }
+    
+    public int[] getDifferences(){
+        return this.differences;
     }
 
     
