@@ -103,7 +103,8 @@ public class Metaheuristic {
             
             
             for ( int i = 0 ; i < poblation.size() ; i++ ){
-                int [] M = mutate(i);
+                int [] M = cross(i);
+                int [] N = mutate(M);
                 
                 //se revisa que la nueva matriz cumpla con MCDP y se reemplaza con el riginal si el fitness es mejor
                 Individual Pk = new Individual(poblation.get(i).getMachine_cell(), poblation.get(i).getFitness());
@@ -114,11 +115,22 @@ public class Metaheuristic {
                     Pk.setFitness(boctorModel.calculateFitness());
                     Pk.setMachine_cell(boctorModel.getMachine());
                 }
+                Individual Pl = new Individual(poblation.get(i).getMachine_cell(), poblation.get(i).getFitness());
+                Pk.setMachine_cell(N);
+                boctorModel= new MCDPModel(data.f_weight, data.f_size, data.n,Pl.getMachine_cell());
+                constraintOK = boctorModel.checkConstraint();
+                if(constraintOK == true){
+                    Pl.setFitness(boctorModel.calculateFitness());
+                    Pl.setMachine_cell(boctorModel.getMachine());
+                }
                 if(Pk.getFitness()<poblation.get(i).getFitness()){
                     poblation.get(i).setMachine_cell(Pk.getMachine_cell());
                     poblation.get(i).setFitness(Pk.getFitness());
                 }
-               
+                if(Pl.getFitness()<poblation.get(i).getFitness()){
+                    poblation.get(i).setMachine_cell(Pk.getMachine_cell());
+                    poblation.get(i).setFitness(Pk.getFitness());
+                }
                 
                 
             }
@@ -150,7 +162,7 @@ public class Metaheuristic {
     //</editor-fold>
     
     
-    public int[] mutate(int i){
+    public int[] cross(int i){
         int M[] = this.poblation.get(i).getMachine_cell();
         Random random= new Random();
         int A,B,aux;
@@ -168,7 +180,15 @@ public class Metaheuristic {
             aux=M[A];
             M[A]=M[B];
             M[B]=aux;
-        }else{
+        }
+        
+        return M;
+    }
+    //98482.0 96534.0 95560.0
+    public int[] mutate(int[] M){
+        Random random= new Random();
+        int A,B,aux;
+        for(int j =0 ; j< this.data.n/2; j++){
             A=(int)(random.nextDouble()*(this.data.n));
             if(A==8)A=7;
             do{
@@ -180,10 +200,8 @@ public class Metaheuristic {
             M[A]=M[B];
             M[B]=aux;
         }
-        
         return M;
     }
-    
     
     private ArrayList<Individual> Gallos;
     private ArrayList<Individual> Pollitos;
