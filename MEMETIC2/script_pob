@@ -1,0 +1,9 @@
+#!/bin/bash
+for i in 10 20 30 40 50
+do
+	java -jar "/home/francisco/Documents/Magister/proyectos/mcdp-hbm/dist/MCDP-HBM.jar" $i
+done
+
+
+
+
