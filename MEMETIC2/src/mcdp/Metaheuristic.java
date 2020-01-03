@@ -96,44 +96,20 @@ public class Metaheuristic {
 
         while (iteration < this.numberIteration) {
             
-            for ( int i = 0 ; i < poblation.size() ; i++ ){
-                poblation.get(i).calculateDifferences(poblation.get(0).getMachine_cell());
-            }
             
-            
-            
-            for ( int i = 0 ; i < poblation.size() ; i++ ){
-                int [] M = cross(i);
-                int [] N = mutate(M);
-                
-                //se revisa que la nueva matriz cumpla con MCDP y se reemplaza con el riginal si el fitness es mejor
-                Individual Pk = new Individual(poblation.get(i).getMachine_cell(), poblation.get(i).getFitness());
-                Pk.setMachine_cell(M);
-                MCDPModel boctorModel= new MCDPModel(data.f_weight, data.f_size, data.n,Pk.getMachine_cell());
-                Boolean constraintOK = boctorModel.checkConstraint();
-                if(constraintOK == true){
-                    Pk.setFitness(boctorModel.calculateFitness());
-                    Pk.setMachine_cell(boctorModel.getMachine());
+                int[] initial = poblation.get(0).getMachine_cell();
+                for(int i=0; i <(data.n-1); i++){
+                    for(int j = i+1 ; j<data.n ; j++){
+                        int[] M = mutate(initial,i,j);
+                        Individual pk = new Individual(M);
+                        MCDPModel boctorModel= new MCDPModel(data.f_weight,data.f_size,data.n,M);
+                        pk.setFitness(boctorModel.calculateFitness());
+                        if(pk.getFitness()<=poblation.get(0).getFitness()){
+                            poblation.get(0).setFitness(pk.getFitness());
+                            poblation.get(0).setMachine_cell(pk.getMachine_cell());
+                        }
+                    }
                 }
-                Individual Pl = new Individual(poblation.get(i).getMachine_cell(), poblation.get(i).getFitness());
-                Pk.setMachine_cell(N);
-                boctorModel= new MCDPModel(data.f_weight, data.f_size, data.n,Pl.getMachine_cell());
-                constraintOK = boctorModel.checkConstraint();
-                if(constraintOK == true){
-                    Pl.setFitness(boctorModel.calculateFitness());
-                    Pl.setMachine_cell(boctorModel.getMachine());
-                }
-                if(Pk.getFitness()<poblation.get(i).getFitness()){
-                    poblation.get(i).setMachine_cell(Pk.getMachine_cell());
-                    poblation.get(i).setFitness(Pk.getFitness());
-                }
-                if(Pl.getFitness()<poblation.get(i).getFitness()){
-                    poblation.get(i).setMachine_cell(Pk.getMachine_cell());
-                    poblation.get(i).setFitness(Pk.getFitness());
-                }
-                
-                
-            }
             
             ordenaBacterias();
             if (poblation.get(0).getFitness() < mejorFitness) {
@@ -142,16 +118,14 @@ public class Metaheuristic {
                 System.out.println("mejor fitness: "+mejorFitness+ " iteracion: "+iteration);
 
             }
-            System.out.println("Fitness ciclo "+iteration+" = "+poblation.get(0).getFitness());
-            for(int i =0; i< poblation.size();i++){
-                System.out.print(" "+poblation.get(i).getFitness());
-            }
-            System.out.print("\n");
+            System.out.println("iteracion: "+iteration);
+            
             //System.out.println("mejor fitness: "+mejorFitness+ " iteracion: "+iteration);
             //seriesIterationFitness.add(iteration, bestSolution.getFitness());
 
             iteration++;
         }
+        System.out.println("best solution: "+mejorFitness);
    
         //chooseBestSolutionInPoblation();
         //System.out.println("<<<<<<<<<<<<<<<<<<<<<<<END-RUN");
@@ -162,44 +136,14 @@ public class Metaheuristic {
     //</editor-fold>
     
     
-    public int[] cross(int i){
-        int M[] = this.poblation.get(i).getMachine_cell();
-        Random random= new Random();
-        int A,B,aux;
-        if(this.poblation.get(i).getCantDifferences()!=0){
-            int[] differences= poblation.get(i).getDifferences();
-            do{
-                A=(int)(random.nextDouble()*(this.data.n));
-                if(A==8)A=7;
-            }while(differences[A]==0);
-            do{
-                B=(int)(random.nextDouble()*(this.data.n));
-                if(B==8)B=7;
-            }while(B==A || differences[B]==0);
+    
+    //98482.0 96534.0 95560.0 72553.0
+    public int[] mutate(int[] M,int A, int B){
+        int aux;
+        aux=M[A];
+        M[A]=M[B];
+        M[B]=aux;
 
-            aux=M[A];
-            M[A]=M[B];
-            M[B]=aux;
-        }
-        
-        return M;
-    }
-    //98482.0 96534.0 95560.0
-    public int[] mutate(int[] M){
-        Random random= new Random();
-        int A,B,aux;
-        for(int j =0 ; j< this.data.n/2; j++){
-            A=(int)(random.nextDouble()*(this.data.n));
-            if(A==8)A=7;
-            do{
-                B=(int)(random.nextDouble()*(this.data.n));
-                if(B==8)B=7;
-            }while(B==A);
-
-            aux=M[A];
-            M[A]=M[B];
-            M[B]=aux;
-        }
         return M;
     }
     
