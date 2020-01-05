@@ -20,7 +20,6 @@ public class Metaheuristic {
 //<editor-fold defaultstate="collapsed" desc="Constructor">
     public Metaheuristic(int numberIndividual, int numberIteration, MCDPData data) {
 
-        System.out.println("numberIndividual: "+ numberIndividual+ " num iteraciones: " +numberIteration + " factor de consulta: "+ consultationFactor);
         this.numberIndividual = numberIndividual;
         this.numberIteration = numberIteration;
 
@@ -77,9 +76,6 @@ public class Metaheuristic {
     }
     //</editor-fold>
     
-    
-    
-    
     public int[] mutate(int[] M,int A, int B){
         int aux;
         aux=M[A];
@@ -93,8 +89,6 @@ public class Metaheuristic {
         boolean orden = false;
         int i = 0;
         Individual aux = null;
-        int mayor = 0;
-        int indice =0;
         while(i<poblation.size() && orden == false){
             i+=1;
             orden = true;
@@ -114,27 +108,14 @@ public class Metaheuristic {
     private void generateInitialPoblation() {
         for (int i = 0; i < numberIndividual; i++) {
             // Inicialite procedure
-            boolean constraintOK = false;
             MCDPRandomSolution randomSolution = new MCDPRandomSolution(data.getF_weight(), data.getF_size(), data.getN());
             float randomSolutionFitness = 0;
-
-            // Estoy en el ciclo hasta generar una solución randomica que satisfaga las restricciones
-            while (constraintOK == false) {
-                // Create random solution
-                
-                randomSolution.createRandomSolution();
-
-                // Check constraint
-                MCDPModel boctorModel = new MCDPModel(data.getF_weight(), data.getF_size(), data.getN(),
-                        randomSolution.getMachine_cell());
-                randomSolutionFitness = boctorModel.calculateFitness();
-                 
-                
-            }
-
+            randomSolution.createRandomSolution();
+            MCDPModel boctorModel = new MCDPModel(data.getF_weight(), data.getF_size(), data.getN(),
+                    randomSolution.getMachine_cell());
+            randomSolutionFitness = boctorModel.calculateFitness();
             // Create Solution
             Individual individual = new Individual(randomSolution.getMachine_cell(), randomSolutionFitness);
-
             // Add Solution in poblation
             poblation.add(individual);
         }
