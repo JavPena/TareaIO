@@ -19,15 +19,15 @@ import java.io.Reader;
 public class MCDPData {
 
   /* numero de instalaciones */
-  int n; 
+  private int n; 
   /* Lista de los tamaños de las instalaciones a ubicar */
-  int[] f_size;
+  private int[] f_size;
 
   /* matriz de pesos: f_weight[i][j] peso/flujo entre las instalaciones i a j */
-  int[][] f_weight;
+  private int[][] f_weight;
 
   /* instance file name */
-  String name;
+  private String name;
 
 
   public MCDPData (File file_name)
@@ -105,6 +105,38 @@ public class MCDPData {
       line = bufferedReader.readLine();
     }
   } 
+
+    public int getN() {
+        return n;
+    }
+
+    public void setN(int n) {
+        this.n = n;
+    }
+
+    public int[] getF_size() {
+        return f_size;
+    }
+
+    public void setF_size(int[] f_size) {
+        this.f_size = f_size;
+    }
+
+    public int[][] getF_weight() {
+        return f_weight;
+    }
+
+    public void setF_weight(int[][] f_weight) {
+        this.f_weight = f_weight;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
   public void printInstance () {
     /*

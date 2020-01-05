@@ -1,7 +1,5 @@
 package mcdp;
 
-import java.util.Arrays;
-
 public class MCDPModel {
     
     //mismos datos que el data
@@ -21,22 +19,7 @@ public class MCDPModel {
         this.superA = superA;
     }
 
-   
     
-    
-
-    
-
-    public boolean checkConstraint() {
-        return true;
-    }
-    
-    public int[] getMachine(){
-        return superA;
-    }
-
-    // Objective function 
-    //TODO: cambiar
     public float calculateFitness() {
         float sum = 0;
         
