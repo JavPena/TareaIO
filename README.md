@@ -1,3 +1,3 @@
 # TareaIO
 
-Recordar limpiar el codigo antes de entregarlo
+Sha Esta limpio :3
