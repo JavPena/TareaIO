@@ -25,11 +25,11 @@ public class hbm {
      * @param args
      */
     public static void main(String[] args) throws IOException {
-        int numberPoblation = 10;
+        int numberPoblation = 30;
         Path currentRelativePath = Paths.get("");
         String s = currentRelativePath.toAbsolutePath().toString();
         //iteracion del algoritmo############
-        int numberIteration = 100;
+        int numberIteration = 50;
         MCDPData data;
         String subFolderProblems = "newInstance";
         File dir = new File(s + "/src/problems/" + subFolderProblems);

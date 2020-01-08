@@ -51,12 +51,13 @@ public class Metaheuristic {
                         Individual pk = new Individual(M);
                         MCDPModel boctorModel= new MCDPModel(data.getF_weight(),data.getF_size(),data.getN(),M);
                         pk.setFitness(boctorModel.calculateFitness());
-                        if(pk.getFitness()<=poblation.get(0).getFitness()){
-                            poblation.get(0).setFitness(pk.getFitness());
-                            poblation.get(0).setMachine_cell(pk.getMachine_cell());
+                        if(pk.getFitness()<=poblation.get(k).getFitness()){
+                            poblation.get(k).setFitness(pk.getFitness());
+                            poblation.get(k).setMachine_cell(pk.getMachine_cell());
                         }
                     }
                 }
+                
             }
             ordenaBacterias();
             if (poblation.get(0).getFitness() < mejorFitness) {
@@ -64,13 +65,24 @@ public class Metaheuristic {
                 System.out.println("mejor fitness: "+mejorFitness+ " iteracion: "+iteration);
 
             }
+            for(int l=0;l<poblation.size();l++){
+                    System.out.print(" "+poblation.get(l).getFitness());
+                }
+                System.out.println();
             System.out.println("iteracion: "+iteration);
             
             
             iteration++;
         }
-        System.out.println("best solution: "+mejorFitness);
+        for(int k=0;k<poblation.size();k++){
+            System.out.print(" "+poblation.get(k).getFitness());
+        }
+        System.out.println("\nbest solution: "+mejorFitness);
         poblation.get(0).printSolution();
+        System.out.println();
+        
+        
+        
    
         
     }
