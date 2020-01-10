@@ -1,4 +1,4 @@
-package mcdp;
+package tareaIo;
 
 public class Individual {
 
@@ -60,4 +60,5 @@ public class Individual {
     public void setFitness(float fitness) {
         this.fitness = fitness;
     }
+    
 }

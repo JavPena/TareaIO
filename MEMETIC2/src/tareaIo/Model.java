@@ -1,6 +1,6 @@
-package mcdp;
+package tareaIo;
 
-public class MCDPModel {
+public class Model {
     
     //mismos datos que el data
     private int[][] f_weight;
@@ -12,7 +12,7 @@ public class MCDPModel {
 
     
     
-    public MCDPModel(int f_weight[][], int[] f_size, int N, int[] superA) {
+    public Model(int f_weight[][], int[] f_size, int N, int[] superA) {
         this.f_weight = f_weight;
         this.f_size = f_size;
         this.N = N;

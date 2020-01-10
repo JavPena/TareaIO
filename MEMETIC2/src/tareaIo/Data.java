@@ -1,4 +1,4 @@
-package mcdp;
+package tareaIo;
 
 /* SRFLP class
  * Clase que lee una instancia de
@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 
-public class MCDPData {
+public class Data {
 
   /* numero de instalaciones */
   private int n; 
@@ -30,7 +30,7 @@ public class MCDPData {
   private String name;
 
 
-  public MCDPData (File file_name)
+  public Data (File file_name)
   /*
    * FUNCTION: Constuctor clase SRFLP
    * INPUT: Ruta al archivo de la instancia

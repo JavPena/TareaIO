@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package mcdp;
+package tareaIo;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,18 +19,18 @@ import java.util.stream.IntStream;
 import static java.util.stream.IntStream.range;
 
 
-public class hbm {
+public class Main {
 
     /**
      * @param args
      */
     public static void main(String[] args) throws IOException {
-        int numberPoblation = 30;
+        int numberPoblation = 10;
         Path currentRelativePath = Paths.get("");
         String s = currentRelativePath.toAbsolutePath().toString();
         //iteracion del algoritmo############
-        int numberIteration = 50;
-        MCDPData data;
+        int numberIteration = 1000;
+        Data data;
         String subFolderProblems = "newInstance";
         File dir = new File(s + "/src/problems/" + subFolderProblems);
         File[] directoryListing = dir.listFiles();
@@ -42,8 +42,8 @@ public class hbm {
                 //ITERACION DEL programa############
                 int numberIterationForStatistics = 1;
                 while (iterationsForStatistics < numberIterationForStatistics) {
-                    data = new MCDPData(fileProblem);
-                    metaheuristic = new Metaheuristic(numberPoblation, numberIteration, data);
+                    data = new Data(fileProblem);
+                    metaheuristic = new Metaheuristic(numberPoblation, numberIteration, data, 0.35f);
                     metaheuristic.run();
                     iterationsForStatistics++;
                 }

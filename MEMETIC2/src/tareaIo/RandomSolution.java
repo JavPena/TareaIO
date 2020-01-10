@@ -1,8 +1,8 @@
-package mcdp;
+package tareaIo;
 
 import java.util.Random;
 
-public class MCDPRandomSolution {
+public class RandomSolution {
 
     // Solution matrix
 
@@ -13,7 +13,7 @@ public class MCDPRandomSolution {
     private int[] superA;
 
     // Constructor
-    public MCDPRandomSolution(int f_weight[][], int[] f_size, int N) {
+    public RandomSolution(int f_weight[][], int[] f_size, int N) {
         this.f_weight = f_weight;
         this.f_size = f_size;
         this.N = N;
