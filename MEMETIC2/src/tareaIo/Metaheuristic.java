@@ -100,7 +100,7 @@ public class Metaheuristic {
         
     }
     //</editor-fold>
-   
+    
     public void selectTourney(){
         this.tourneyPoblation.clear();
         Individual fight1,fight2;
@@ -156,6 +156,10 @@ public class Metaheuristic {
                 int pos2 = random.nextInt(aux.length);
                 if(pos1<pos2){
                     for(int i = pos1 ; i< pos2 ; i++){
+                        aux=switchPosition(aux,i,i+1);
+                    }
+                }else{
+                    for(int i = pos2 ; i< pos1 ; i++){
                         aux=switchPosition(aux,i,i+1);
                     }
                 }
